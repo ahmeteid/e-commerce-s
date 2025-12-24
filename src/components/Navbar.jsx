@@ -17,26 +17,37 @@ import {
   ListItemText,
   IconButton,
   Divider,
+  Menu,
+  MenuItem,
 } from "@mui/material";
 import {
   ShoppingCart,
-  Menu,
+  Menu as MenuIcon,
   Close,
   Home,
   Store,
   ShoppingBag,
   Receipt,
+  Login,
+  PersonAdd,
+  Logout,
+  AccountCircle,
 } from "@mui/icons-material";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import { useAuth } from "../context/AuthContext";
 
 const Navbar = () => {
   const { getCartItemCount } = useCart();
+  const { user, logout, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const isTablet = useMediaQuery(theme.breakpoints.between("sm", "md"));
+  const isSmallDesktop = useMediaQuery(theme.breakpoints.between("md", "lg"));
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
   const cartItemCount = getCartItemCount();
 
   const isActive = (path) => location.pathname === path;
@@ -52,20 +63,38 @@ const Navbar = () => {
     }
   };
 
+  const handleMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    logout();
+    handleMenuClose();
+    navigate("/");
+  };
+
   const menuItems = [
     { text: "Home", path: "/", icon: <Home /> },
     { text: "Products", path: "/products", icon: <Store /> },
     { text: "Cart", path: "/cart", icon: <ShoppingCart /> },
-    { text: "Orders", path: "/orders", icon: <ShoppingBag /> },
+    ...(isAuthenticated
+      ? [{ text: "Orders", path: "/orders", icon: <ShoppingBag /> }]
+      : []),
   ];
 
   const drawer = (
     <Box
       sx={{
-        width: 280,
+        width: { xs: 260, sm: 280 },
         height: "100%",
         background: "linear-gradient(135deg, #1976d2 0%, #42a5f5 100%)",
         color: "white",
+        display: "flex",
+        flexDirection: "column",
       }}
     >
       <Box
@@ -73,14 +102,22 @@ const Navbar = () => {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          p: 2,
+          p: { xs: 1.5, sm: 2 },
+          flexShrink: 0,
         }}
       >
-        <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+        <Typography
+          variant="h6"
+          sx={{
+            fontWeight: "bold",
+            fontSize: { xs: "1rem", sm: "1.25rem" },
+          }}
+        >
           🛍️ E-Commerce Store
         </Typography>
         <IconButton
           onClick={handleDrawerToggle}
+          size="small"
           sx={{
             color: "white",
             "&:hover": {
@@ -92,7 +129,7 @@ const Navbar = () => {
         </IconButton>
       </Box>
       <Divider sx={{ borderColor: "rgba(255,255,255,0.2)" }} />
-      <List sx={{ pt: 2 }}>
+      <List sx={{ pt: 2, flexGrow: 1, overflowY: "auto" }}>
         {menuItems.map((item) => (
           <ListItem key={item.text} disablePadding>
             <ListItemButton
@@ -146,6 +183,112 @@ const Navbar = () => {
             </ListItemButton>
           </ListItem>
         ))}
+        <Divider sx={{ borderColor: "rgba(255,255,255,0.2)", my: 1 }} />
+        {!isAuthenticated ? (
+          <>
+            <ListItem disablePadding>
+              <ListItemButton
+                onClick={() => handleNavClick("/login")}
+                sx={{
+                  mx: 1,
+                  mb: 1,
+                  borderRadius: 2,
+                  backgroundColor: isActive("/login")
+                    ? "rgba(255,255,255,0.2)"
+                    : "transparent",
+                  transition: "all 0.3s ease",
+                  "&:hover": {
+                    backgroundColor: "rgba(255,255,255,0.15)",
+                    transform: "translateX(8px)",
+                  },
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    color: "white",
+                    minWidth: 40,
+                  }}
+                >
+                  <Login />
+                </ListItemIcon>
+                <ListItemText
+                  primary="Login"
+                  primaryTypographyProps={{
+                    fontWeight: isActive("/login") ? 700 : 400,
+                    fontSize: "1.1rem",
+                  }}
+                />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton
+                onClick={() => handleNavClick("/signup")}
+                sx={{
+                  mx: 1,
+                  mb: 1,
+                  borderRadius: 2,
+                  backgroundColor: isActive("/signup")
+                    ? "rgba(255,255,255,0.2)"
+                    : "transparent",
+                  transition: "all 0.3s ease",
+                  "&:hover": {
+                    backgroundColor: "rgba(255,255,255,0.15)",
+                    transform: "translateX(8px)",
+                  },
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    color: "white",
+                    minWidth: 40,
+                  }}
+                >
+                  <PersonAdd />
+                </ListItemIcon>
+                <ListItemText
+                  primary="Sign Up"
+                  primaryTypographyProps={{
+                    fontWeight: isActive("/signup") ? 700 : 400,
+                    fontSize: "1.1rem",
+                  }}
+                />
+              </ListItemButton>
+            </ListItem>
+          </>
+        ) : (
+          <ListItem disablePadding>
+            <ListItemButton
+              onClick={() => {
+                handleLogout();
+              }}
+              sx={{
+                mx: 1,
+                mb: 1,
+                borderRadius: 2,
+                transition: "all 0.3s ease",
+                "&:hover": {
+                  backgroundColor: "rgba(255,255,255,0.15)",
+                  transform: "translateX(8px)",
+                },
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  color: "white",
+                  minWidth: 40,
+                }}
+              >
+                <Logout />
+              </ListItemIcon>
+              <ListItemText
+                primary="Logout"
+                primaryTypographyProps={{
+                  fontSize: "1.1rem",
+                }}
+              />
+            </ListItemButton>
+          </ListItem>
+        )}
       </List>
     </Box>
   );
@@ -165,11 +308,13 @@ const Navbar = () => {
       >
         <Toolbar
           sx={{
-            py: { xs: 0.5, sm: 1 },
+            py: { xs: 0.5, sm: 0.75, md: 1 },
             maxWidth: "100%",
             width: "100%",
-            px: { xs: 2, sm: 3, md: 4 },
+            px: { xs: 1.5, sm: 2, md: 2, lg: 3 },
             justifyContent: "space-between",
+            gap: { xs: 1, sm: 2 },
+            minHeight: { xs: "56px", sm: "64px" },
           }}
         >
           {/* Logo */}
@@ -182,26 +327,50 @@ const Navbar = () => {
                 textDecoration: "none",
                 color: "inherit",
                 fontWeight: "bold",
-                fontSize: { xs: "1rem", sm: "1.25rem", md: "1.5rem" },
+                fontSize: {
+                  xs: "0.9rem",
+                  sm: "1.1rem",
+                  md: "1.25rem",
+                  lg: "1.5rem",
+                },
                 transition: "transform 0.2s",
                 display: "flex",
                 alignItems: "center",
-                gap: 1,
+                gap: { xs: 0.5, sm: 1 },
+                flexShrink: 0,
                 "&:hover": {
                   transform: "scale(1.05)",
                 },
               }}
             >
-              🛍️ E-Commerce Store
+              <Box
+                component="span"
+                sx={{ display: { xs: "block", sm: "block" } }}
+              >
+                🛍️
+              </Box>
+              <Box
+                component="span"
+                sx={{
+                  display: { xs: "none", sm: "inline" },
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  maxWidth: { sm: "120px", md: "150px", lg: "none" },
+                }}
+              >
+                E-Commerce Store
+              </Box>
             </Typography>
           </Fade>
 
-          {/* Desktop Navigation */}
+          {/* Desktop/Tablet Navigation */}
           <Box
             sx={{
               display: { xs: "none", md: "flex" },
-              gap: 1,
+              gap: { md: 0.5, lg: 1 },
               alignItems: "center",
+              flexWrap: "nowrap",
             }}
           >
             <Button
@@ -210,14 +379,15 @@ const Navbar = () => {
               to="/"
               startIcon={<Home />}
               sx={{
-                fontSize: "1rem",
+                fontSize: { md: "0.875rem", lg: "1rem" },
                 fontWeight: isActive("/") ? 700 : 400,
                 backgroundColor: isActive("/")
                   ? "rgba(255,255,255,0.2)"
                   : "transparent",
                 borderRadius: 2,
-                px: 2,
+                px: { md: 1, lg: 2 },
                 py: 1,
+                minWidth: { md: "auto", lg: "64px" },
                 transition: "all 0.3s ease",
                 "&:hover": {
                   backgroundColor: "rgba(255,255,255,0.15)",
@@ -226,7 +396,12 @@ const Navbar = () => {
                 },
               }}
             >
-              Home
+              <Box
+                component="span"
+                sx={{ display: { md: "none", lg: "inline" } }}
+              >
+                Home
+              </Box>
             </Button>
             <Button
               color="inherit"
@@ -234,14 +409,15 @@ const Navbar = () => {
               to="/products"
               startIcon={<Store />}
               sx={{
-                fontSize: "1rem",
+                fontSize: { md: "0.875rem", lg: "1rem" },
                 fontWeight: isActive("/products") ? 700 : 400,
                 backgroundColor: isActive("/products")
                   ? "rgba(255,255,255,0.2)"
                   : "transparent",
                 borderRadius: 2,
-                px: 2,
+                px: { md: 1, lg: 2 },
                 py: 1,
+                minWidth: { md: "auto", lg: "64px" },
                 transition: "all 0.3s ease",
                 "&:hover": {
                   backgroundColor: "rgba(255,255,255,0.15)",
@@ -250,32 +426,45 @@ const Navbar = () => {
                 },
               }}
             >
-              Products
+              <Box
+                component="span"
+                sx={{ display: { md: "none", lg: "inline" } }}
+              >
+                Products
+              </Box>
             </Button>
-            <Button
-              color="inherit"
-              component={Link}
-              to="/orders"
-              startIcon={<Receipt />}
-              sx={{
-                fontSize: "1rem",
-                fontWeight: isActive("/orders") ? 700 : 400,
-                backgroundColor: isActive("/orders")
-                  ? "rgba(255,255,255,0.2)"
-                  : "transparent",
-                borderRadius: 2,
-                px: 2,
-                py: 1,
-                transition: "all 0.3s ease",
-                "&:hover": {
-                  backgroundColor: "rgba(255,255,255,0.15)",
-                  transform: "translateY(-2px)",
-                  boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
-                },
-              }}
-            >
-              Orders
-            </Button>
+            {isAuthenticated && (
+              <Button
+                color="inherit"
+                component={Link}
+                to="/orders"
+                startIcon={<Receipt />}
+                sx={{
+                  fontSize: { md: "0.875rem", lg: "1rem" },
+                  fontWeight: isActive("/orders") ? 700 : 400,
+                  backgroundColor: isActive("/orders")
+                    ? "rgba(255,255,255,0.2)"
+                    : "transparent",
+                  borderRadius: 2,
+                  px: { md: 1, lg: 2 },
+                  py: 1,
+                  minWidth: { md: "auto", lg: "64px" },
+                  transition: "all 0.3s ease",
+                  "&:hover": {
+                    backgroundColor: "rgba(255,255,255,0.15)",
+                    transform: "translateY(-2px)",
+                    boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+                  },
+                }}
+              >
+                <Box
+                  component="span"
+                  sx={{ display: { md: "none", lg: "inline" } }}
+                >
+                  Orders
+                </Box>
+              </Button>
+            )}
             <Button
               color="inherit"
               startIcon={
@@ -288,6 +477,7 @@ const Navbar = () => {
                         cartItemCount > 0
                           ? "pulse 1s ease-in-out infinite"
                           : "none",
+                      fontSize: { md: "0.65rem", lg: "0.75rem" },
                     },
                     "@keyframes pulse": {
                       "0%, 100%": { transform: "scale(1)" },
@@ -300,14 +490,15 @@ const Navbar = () => {
               }
               onClick={() => navigate("/cart")}
               sx={{
-                fontSize: "1rem",
+                fontSize: { md: "0.875rem", lg: "1rem" },
                 fontWeight: isActive("/cart") ? 700 : 400,
                 backgroundColor: isActive("/cart")
                   ? "rgba(255,255,255,0.2)"
                   : "transparent",
                 borderRadius: 2,
-                px: 2,
+                px: { md: 1, lg: 2 },
                 py: 1,
+                minWidth: { md: "auto", lg: "64px" },
                 transition: "all 0.3s ease",
                 "&:hover": {
                   backgroundColor: "rgba(255,255,255,0.15)",
@@ -316,8 +507,139 @@ const Navbar = () => {
                 },
               }}
             >
-              Cart
+              <Box
+                component="span"
+                sx={{ display: { md: "none", lg: "inline" } }}
+              >
+                Cart
+              </Box>
             </Button>
+
+            {/* Authentication Buttons */}
+            {isAuthenticated ? (
+              <>
+                <Button
+                  color="inherit"
+                  startIcon={<AccountCircle />}
+                  onClick={handleMenuOpen}
+                  sx={{
+                    fontSize: { md: "0.875rem", lg: "1rem" },
+                    borderRadius: 2,
+                    px: { md: 1, lg: 2 },
+                    py: 1,
+                    minWidth: { md: "auto", lg: "auto" },
+                    transition: "all 0.3s ease",
+                    "&:hover": {
+                      backgroundColor: "rgba(255,255,255,0.15)",
+                      transform: "translateY(-2px)",
+                    },
+                  }}
+                >
+                  <Box
+                    component="span"
+                    sx={{
+                      display: { md: "none", lg: "inline" },
+                      maxWidth: { lg: "120px" },
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {user?.name || "Account"}
+                  </Box>
+                </Button>
+                <Menu
+                  anchorEl={anchorEl}
+                  open={Boolean(anchorEl)}
+                  onClose={handleMenuClose}
+                  PaperProps={{
+                    sx: {
+                      mt: 1.5,
+                      borderRadius: 2,
+                      minWidth: 200,
+                    },
+                  }}
+                >
+                  <MenuItem disabled>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      sx={{
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                        maxWidth: "200px",
+                      }}
+                    >
+                      {user?.email}
+                    </Typography>
+                  </MenuItem>
+                  <Divider />
+                  <MenuItem onClick={handleLogout}>
+                    <ListItemIcon>
+                      <Logout fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText>Logout</ListItemText>
+                  </MenuItem>
+                </Menu>
+              </>
+            ) : (
+              <>
+                <Button
+                  color="inherit"
+                  component={Link}
+                  to="/login"
+                  startIcon={<Login />}
+                  sx={{
+                    fontSize: { md: "0.875rem", lg: "1rem" },
+                    borderRadius: 2,
+                    px: { md: 1, lg: 2 },
+                    py: 1,
+                    minWidth: { md: "auto", lg: "64px" },
+                    transition: "all 0.3s ease",
+                    "&:hover": {
+                      backgroundColor: "rgba(255,255,255,0.15)",
+                      transform: "translateY(-2px)",
+                    },
+                  }}
+                >
+                  <Box
+                    component="span"
+                    sx={{ display: { md: "none", lg: "inline" } }}
+                  >
+                    Login
+                  </Box>
+                </Button>
+                <Button
+                  color="inherit"
+                  component={Link}
+                  to="/signup"
+                  startIcon={<PersonAdd />}
+                  variant="outlined"
+                  sx={{
+                    fontSize: { md: "0.875rem", lg: "1rem" },
+                    borderRadius: 2,
+                    px: { md: 1, lg: 2 },
+                    py: 1,
+                    minWidth: { md: "auto", lg: "80px" },
+                    borderColor: "rgba(255,255,255,0.5)",
+                    transition: "all 0.3s ease",
+                    "&:hover": {
+                      backgroundColor: "rgba(255,255,255,0.15)",
+                      transform: "translateY(-2px)",
+                      borderColor: "rgba(255,255,255,0.8)",
+                    },
+                  }}
+                >
+                  <Box
+                    component="span"
+                    sx={{ display: { md: "none", lg: "inline" } }}
+                  >
+                    Sign Up
+                  </Box>
+                </Button>
+              </>
+            )}
           </Box>
 
           {/* Mobile Navigation */}
@@ -325,12 +647,14 @@ const Navbar = () => {
             sx={{
               display: { xs: "flex", md: "none" },
               alignItems: "center",
-              gap: 1,
+              gap: { xs: 0.5, sm: 1 },
+              flexShrink: 0,
             }}
           >
             <IconButton
               color="inherit"
               onClick={() => navigate("/cart")}
+              size={isMobile ? "small" : "medium"}
               sx={{
                 position: "relative",
                 transition: "all 0.3s ease",
@@ -349,17 +673,51 @@ const Navbar = () => {
                       cartItemCount > 0
                         ? "pulse 1s ease-in-out infinite"
                         : "none",
+                    fontSize: "0.65rem",
                   },
                 }}
               >
-                <ShoppingCart />
+                <ShoppingCart fontSize={isMobile ? "small" : "medium"} />
               </Badge>
             </IconButton>
+            {!isAuthenticated && (
+              <IconButton
+                color="inherit"
+                onClick={() => navigate("/login")}
+                size={isMobile ? "small" : "medium"}
+                sx={{
+                  transition: "all 0.3s ease",
+                  "&:hover": {
+                    transform: "scale(1.1)",
+                    backgroundColor: "rgba(255,255,255,0.15)",
+                  },
+                }}
+              >
+                <Login fontSize={isMobile ? "small" : "medium"} />
+              </IconButton>
+            )}
+            {isAuthenticated && (
+              <IconButton
+                color="inherit"
+                onClick={handleMenuOpen}
+                size={isMobile ? "small" : "medium"}
+                sx={{
+                  transition: "all 0.3s ease",
+                  "&:hover": {
+                    transform: "scale(1.1)",
+                    backgroundColor: "rgba(255,255,255,0.15)",
+                  },
+                }}
+              >
+                <AccountCircle fontSize={isMobile ? "small" : "medium"} />
+              </IconButton>
+            )}
             <IconButton
               color="inherit"
               aria-label="open drawer"
               edge="end"
               onClick={handleDrawerToggle}
+              size={isMobile ? "small" : "medium"}
               sx={{
                 transition: "all 0.3s ease",
                 "&:hover": {
@@ -368,7 +726,7 @@ const Navbar = () => {
                 },
               }}
             >
-              <Menu />
+              <MenuIcon fontSize={isMobile ? "small" : "medium"} />
             </IconButton>
           </Box>
         </Toolbar>
