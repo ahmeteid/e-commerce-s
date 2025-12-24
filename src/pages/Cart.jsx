@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Fade, Grow } from "@mui/material";
 import {
   Container,
@@ -14,17 +15,29 @@ import {
 } from "@mui/material";
 import { Delete, Add, Remove, ShoppingCartCheckout } from "@mui/icons-material";
 import { useCart } from "../context/CartContext";
+import { useOrders } from "../context/OrderContext";
 import { useNavigate } from "react-router-dom";
+import CheckoutDialog from "../components/CheckoutDialog";
 
 const Cart = () => {
   const { cartItems, removeFromCart, updateQuantity, getCartTotal, clearCart } =
     useCart();
+  const { createOrder } = useOrders();
   const navigate = useNavigate();
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
 
-  const handleCheckout = () => {
-    // In a real application, this would navigate to checkout page
-    alert("Checkout functionality would be implemented here!");
+  const handleCheckoutClick = () => {
+    setCheckoutOpen(true);
+  };
+
+  const handleCheckoutConfirm = () => {
+    const total = getCartTotal();
+    const order = createOrder(cartItems, total);
     clearCart();
+    // Navigate to orders page after a short delay
+    setTimeout(() => {
+      navigate("/orders");
+    }, 500);
   };
 
   if (cartItems.length === 0) {
@@ -303,7 +316,7 @@ const Cart = () => {
                     fullWidth
                     size="large"
                     startIcon={<ShoppingCartCheckout />}
-                    onClick={handleCheckout}
+                    onClick={handleCheckoutClick}
                     sx={{
                       py: 1.5,
                       fontSize: "1.1rem",
@@ -324,6 +337,14 @@ const Cart = () => {
           </Grid>
         </Grid>
       </Container>
+
+      <CheckoutDialog
+        open={checkoutOpen}
+        onClose={() => setCheckoutOpen(false)}
+        cartItems={cartItems}
+        total={getCartTotal()}
+        onConfirm={handleCheckoutConfirm}
+      />
     </Box>
   );
 };

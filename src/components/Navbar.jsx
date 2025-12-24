@@ -25,6 +25,7 @@ import {
   Home,
   Store,
   ShoppingBag,
+  Receipt,
 } from "@mui/icons-material";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useCart } from "../context/CartContext";
@@ -55,6 +56,7 @@ const Navbar = () => {
     { text: "Home", path: "/", icon: <Home /> },
     { text: "Products", path: "/products", icon: <Store /> },
     { text: "Cart", path: "/cart", icon: <ShoppingCart /> },
+    { text: "Orders", path: "/orders", icon: <ShoppingBag /> },
   ];
 
   const drawer = (
@@ -249,6 +251,30 @@ const Navbar = () => {
               }}
             >
               Products
+            </Button>
+            <Button
+              color="inherit"
+              component={Link}
+              to="/orders"
+              startIcon={<Receipt />}
+              sx={{
+                fontSize: "1rem",
+                fontWeight: isActive("/orders") ? 700 : 400,
+                backgroundColor: isActive("/orders")
+                  ? "rgba(255,255,255,0.2)"
+                  : "transparent",
+                borderRadius: 2,
+                px: 2,
+                py: 1,
+                transition: "all 0.3s ease",
+                "&:hover": {
+                  backgroundColor: "rgba(255,255,255,0.15)",
+                  transform: "translateY(-2px)",
+                  boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+                },
+              }}
+            >
+              Orders
             </Button>
             <Button
               color="inherit"
