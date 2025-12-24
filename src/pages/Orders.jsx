@@ -241,7 +241,15 @@ const Orders = () => {
                         variant="outlined"
                         startIcon={<Receipt />}
                         size="small"
-                        sx={{ borderRadius: 2 }}
+                        onClick={() => navigate(`/orders/${order.id}`)}
+                        sx={{
+                          borderRadius: 2,
+                          transition: "all 0.3s ease",
+                          "&:hover": {
+                            transform: "translateY(-2px)",
+                            boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+                          },
+                        }}
                       >
                         View Details
                       </Button>

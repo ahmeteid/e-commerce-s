@@ -65,12 +65,23 @@ export const OrderProvider = ({ children }) => {
     );
   };
 
+  const cancelOrder = (orderId) => {
+    setOrders((prevOrders) =>
+      prevOrders.map((order) =>
+        order.id === orderId
+          ? { ...order, status: "cancelled", cancelledAt: new Date().toISOString() }
+          : order
+      )
+    );
+  };
+
   const value = {
     orders,
     createOrder,
     getOrderById,
     getOrderByOrderNumber,
     updateOrderStatus,
+    cancelOrder,
   };
 
   return (
