@@ -1,3 +1,6 @@
+// BACKEND API CODE - COMMENTED OUT FOR NETLIFY DEPLOYMENT
+// Uncomment this section to enable backend API calls
+
 import axios from "axios";
 import { API_BASE_URL } from "../constants/api";
 

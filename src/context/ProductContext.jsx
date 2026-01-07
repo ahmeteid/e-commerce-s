@@ -1,5 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { productService } from "../services/api";
+// Backend API import - commented out for Netlify deployment (using mock data)
+// Uncomment below to enable backend API:
+// import { productService } from "../services/api";
 
 const ProductContext = createContext();
 
@@ -21,6 +23,18 @@ export const ProductProvider = ({ children }) => {
   }, []);
 
   const fetchProducts = async () => {
+    // For Netlify deployment: Using mock data directly (backend commented out)
+    // To enable backend: Uncomment the try-catch block below and comment out the mock data section
+
+    setLoading(true);
+    setError(null);
+
+    // Use mock data directly for Netlify (no backend needed)
+    setProducts(getMockProducts());
+    setLoading(false);
+
+    /* BACKEND CODE - COMMENTED OUT FOR NETLIFY DEPLOYMENT
+    // Uncomment this section to use backend API
     try {
       setLoading(true);
       setError(null);
@@ -53,6 +67,7 @@ export const ProductProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
+    */
   };
 
   const getMockProducts = () => {
@@ -123,6 +138,8 @@ export const ProductProvider = ({ children }) => {
           "https://images.unsplash.com/photo-1542272604-787c3835535d?w=800&h=600&fit=crop&q=80",
         categoryId: 2,
       },
+      // Additional products commented out for Netlify (only showing 6 items)
+      /*
       {
         id: 7,
         name: "The Great Novel",
@@ -145,6 +162,7 @@ export const ProductProvider = ({ children }) => {
           "https://images.unsplash.com/photo-1546519638-68e109498ffc?w=800&h=600&fit=crop&q=80",
         categoryId: 5,
       },
+      */
     ];
   };
 
