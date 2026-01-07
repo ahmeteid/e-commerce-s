@@ -56,7 +56,7 @@ export const AuthProvider = ({ children }) => {
   const signup = (name, email, password) => {
     // In a real app, this would make an API call
     const users = JSON.parse(localStorage.getItem("users") || "[]");
-    
+
     // Check if user already exists
     if (users.find((u) => u.email === email)) {
       return { success: false, error: "Email already registered" };
@@ -100,4 +100,3 @@ export const AuthProvider = ({ children }) => {
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
-

@@ -45,7 +45,7 @@ public class DataInitializer implements CommandLineRunner {
             "High-performance laptop with 16GB RAM and 512GB SSD",
             1299.99,
             25,
-            "https://via.placeholder.com/400x300?text=Laptop",
+            "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=800&h=600&fit=crop&q=80",
             electronics.getId()
         ));
 
@@ -54,7 +54,7 @@ public class DataInitializer implements CommandLineRunner {
             "Ergonomic wireless mouse with long battery life",
             29.99,
             150,
-            "https://via.placeholder.com/400x300?text=Mouse",
+            "https://images.unsplash.com/photo-1527814050087-3793815479db?w=800&h=600&fit=crop&q=80",
             electronics.getId()
         ));
 
@@ -63,7 +63,7 @@ public class DataInitializer implements CommandLineRunner {
             "Latest smartphone with 128GB storage and triple camera",
             899.99,
             40,
-            "https://via.placeholder.com/400x300?text=Smartphone",
+            "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&h=600&fit=crop&q=80",
             electronics.getId()
         ));
 
@@ -72,7 +72,7 @@ public class DataInitializer implements CommandLineRunner {
             "Noise-cancelling wireless headphones",
             199.99,
             60,
-            "https://via.placeholder.com/400x300?text=Headphones",
+            "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&h=600&fit=crop&q=80",
             electronics.getId()
         ));
 
@@ -81,7 +81,7 @@ public class DataInitializer implements CommandLineRunner {
             "10-inch tablet with stylus support",
             499.99,
             30,
-            "https://via.placeholder.com/400x300?text=Tablet",
+            "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=800&h=600&fit=crop&q=80",
             electronics.getId()
         ));
 
@@ -90,7 +90,7 @@ public class DataInitializer implements CommandLineRunner {
             "Comfortable 100% cotton t-shirt in various colors",
             19.99,
             200,
-            "https://via.placeholder.com/400x300?text=T-Shirt",
+            "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&h=600&fit=crop&q=80",
             clothing.getId()
         ));
 
@@ -99,7 +99,7 @@ public class DataInitializer implements CommandLineRunner {
             "Classic fit denim jeans",
             59.99,
             80,
-            "https://via.placeholder.com/400x300?text=Jeans",
+            "https://images.unsplash.com/photo-1542272604-787c3835535d?w=800&h=600&fit=crop&q=80",
             clothing.getId()
         ));
 
@@ -108,7 +108,7 @@ public class DataInitializer implements CommandLineRunner {
             "Warm winter jacket with hood",
             129.99,
             45,
-            "https://via.placeholder.com/400x300?text=Jacket",
+            "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=800&h=600&fit=crop&q=80",
             clothing.getId()
         ));
 
@@ -117,7 +117,7 @@ public class DataInitializer implements CommandLineRunner {
             "Lightweight running shoes for daily use",
             79.99,
             100,
-            "https://via.placeholder.com/400x300?text=Shoes",
+            "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&h=600&fit=crop&q=80",
             clothing.getId()
         ));
 
@@ -126,7 +126,7 @@ public class DataInitializer implements CommandLineRunner {
             "Bestselling fiction novel",
             14.99,
             300,
-            "https://via.placeholder.com/400x300?text=Book",
+            "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=800&h=600&fit=crop&q=80",
             books.getId()
         ));
 
@@ -135,7 +135,7 @@ public class DataInitializer implements CommandLineRunner {
             "Complete guide to modern programming",
             39.99,
             50,
-            "https://via.placeholder.com/400x300?text=Programming+Book",
+            "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=600&fit=crop&q=80",
             books.getId()
         ));
 
@@ -144,7 +144,7 @@ public class DataInitializer implements CommandLineRunner {
             "Beautiful photography coffee table book",
             49.99,
             25,
-            "https://via.placeholder.com/400x300?text=Coffee+Table+Book",
+            "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=800&h=600&fit=crop&q=80",
             books.getId()
         ));
 
@@ -153,7 +153,7 @@ public class DataInitializer implements CommandLineRunner {
             "Complete set of essential garden tools",
             89.99,
             35,
-            "https://via.placeholder.com/400x300?text=Garden+Tools",
+            "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&h=600&fit=crop&q=80",
             homeGarden.getId()
         ));
 
@@ -162,7 +162,7 @@ public class DataInitializer implements CommandLineRunner {
             "Decorative ceramic plant pot set",
             24.99,
             120,
-            "https://via.placeholder.com/400x300?text=Plant+Pot",
+            "https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=800&h=600&fit=crop&q=80",
             homeGarden.getId()
         ));
 
@@ -171,7 +171,7 @@ public class DataInitializer implements CommandLineRunner {
             "Waterproof LED string lights for outdoor use",
             34.99,
             75,
-            "https://via.placeholder.com/400x300?text=LED+Lights",
+            "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=800&h=600&fit=crop&q=80",
             homeGarden.getId()
         ));
 
@@ -180,7 +180,7 @@ public class DataInitializer implements CommandLineRunner {
             "Official size basketball",
             29.99,
             90,
-            "https://via.placeholder.com/400x300?text=Basketball",
+            "https://images.unsplash.com/photo-1546519638-68e109498ffc?w=800&h=600&fit=crop&q=80",
             sports.getId()
         ));
 
@@ -189,7 +189,7 @@ public class DataInitializer implements CommandLineRunner {
             "Non-slip yoga mat with carrying strap",
             39.99,
             65,
-            "https://via.placeholder.com/400x300?text=Yoga+Mat",
+            "https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?w=800&h=600&fit=crop&q=80",
             sports.getId()
         ));
 
@@ -198,7 +198,7 @@ public class DataInitializer implements CommandLineRunner {
             "Professional tennis racket",
             129.99,
             30,
-            "https://via.placeholder.com/400x300?text=Tennis+Racket",
+            "https://images.unsplash.com/photo-1622163642991-c2b9c43ab9b3?w=800&h=600&fit=crop&q=80",
             sports.getId()
         ));
 

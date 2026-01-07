@@ -1,17 +1,21 @@
--- E-Commerce Database Schema and Sample Data
--- This file contains the complete database structure and initial data
+-- PostgreSQL Database Creation Script for E-Commerce Application
+-- Run this script as a PostgreSQL superuser (usually 'postgres')
 
--- Create Database (uncomment if needed)
--- CREATE DATABASE IF NOT EXISTS ecommerce_db;
--- USE ecommerce_db;
+-- Create Database
+-- Note: You cannot create a database inside a transaction block
+-- Run this command separately if needed:
+-- CREATE DATABASE ecommerce_db;
+
+-- Connect to the database (uncomment if running manually)
+-- \c ecommerce_db;
 
 -- Drop tables if they exist (for clean setup)
-DROP TABLE IF EXISTS products;
-DROP TABLE IF EXISTS categories;
+DROP TABLE IF EXISTS products CASCADE;
+DROP TABLE IF EXISTS categories CASCADE;
 
 -- Create Categories Table
 CREATE TABLE categories (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     name VARCHAR(50) NOT NULL UNIQUE,
     description VARCHAR(200),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -19,7 +23,7 @@ CREATE TABLE categories (
 
 -- Create Products Table
 CREATE TABLE products (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     description VARCHAR(500),
     price DECIMAL(10, 2) NOT NULL,
@@ -27,8 +31,12 @@ CREATE TABLE products (
     image_url VARCHAR(255),
     category_id BIGINT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL
+    CONSTRAINT fk_category FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL
 );
+
+-- Create indexes for better performance
+CREATE INDEX idx_products_category_id ON products(category_id);
+CREATE INDEX idx_products_name ON products(name);
 
 -- Insert Sample Categories
 INSERT INTO categories (name, description) VALUES
