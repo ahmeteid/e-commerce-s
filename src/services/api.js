@@ -1,5 +1,5 @@
-// BACKEND API CODE - COMMENTED OUT FOR NETLIFY DEPLOYMENT
-// Uncomment this section to enable backend API calls
+// Backend API Service
+// Handles all API calls to the backend
 
 import axios from "axios";
 import { API_BASE_URL } from "../constants/api";
@@ -10,7 +10,7 @@ const api = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
-  timeout: 3000, // 3 second timeout for faster fallback
+  timeout: 10000, // 10 second timeout for backend requests
 });
 
 // Add request interceptor to handle network errors gracefully
@@ -32,19 +32,19 @@ api.interceptors.response.use(
 
 // Product API functions
 export const productService = {
-  // Get all products
+  // Get all products from backend
   getAllProducts: async () => {
     try {
       const response = await api.get("/products");
       return response.data;
     } catch (error) {
-      // Don't log silent network errors (backend not running)
+      // Log errors except for silent network errors
       if (
         !error.silent &&
         error.code !== "ERR_NETWORK" &&
         error.code !== "ECONNABORTED"
       ) {
-        console.error("Error fetching products:", error);
+        console.error("Error fetching products from backend:", error);
       }
       throw error;
     }

@@ -1,7 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
-// Backend API import - commented out for Netlify deployment (using mock data)
-// Uncomment below to enable backend API:
-// import { productService } from "../services/api";
+import { productService } from "../services/api";
 
 const ProductContext = createContext();
 
@@ -23,23 +21,22 @@ export const ProductProvider = ({ children }) => {
   }, []);
 
   const fetchProducts = async () => {
-    // For Netlify deployment: Using mock data directly (backend commented out)
-    // To enable backend: Uncomment the try-catch block below and comment out the mock data section
-
-    setLoading(true);
-    setError(null);
-
-    // Use mock data directly for Netlify (no backend needed)
-    setProducts(getMockProducts());
-    setLoading(false);
-
-    /* BACKEND CODE - COMMENTED OUT FOR NETLIFY DEPLOYMENT
-    // Uncomment this section to use backend API
     try {
       setLoading(true);
       setError(null);
+
+      // Fetch products from backend API
       const data = await productService.getAllProducts();
       setProducts(data);
+
+      // Log successful backend fetch (only in development)
+      if (process.env.NODE_ENV === "development") {
+        console.log(
+          "✅ Products fetched from backend API:",
+          data.length,
+          "products"
+        );
+      }
     } catch (err) {
       // Check if it's a network error (backend not running)
       const isNetworkError =
@@ -49,25 +46,24 @@ export const ProductProvider = ({ children }) => {
         err.message?.includes("timeout");
 
       if (isNetworkError) {
-        // Silently fallback to mock data when backend is not available
+        // Fallback to mock data when backend is not available
         if (process.env.NODE_ENV === "development") {
-          console.info(
-            "ℹ️ Backend not available, using mock data. Start the Spring Boot backend to use real data."
+          console.warn(
+            "⚠️ Backend API not available, using mock data fallback. Start the Spring Boot backend to use real data."
           );
         }
         setProducts(getMockProducts());
         setError(null);
       } else {
         // For other errors, log and set error state
-        console.error("Error fetching products:", err);
-        setError(err.message || "Failed to fetch products");
+        console.error("❌ Error fetching products from backend:", err);
+        setError(err.message || "Failed to fetch products from backend");
         // Still use mock data as fallback
         setProducts(getMockProducts());
       }
     } finally {
       setLoading(false);
     }
-    */
   };
 
   const getMockProducts = () => {
